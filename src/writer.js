@@ -83,6 +83,13 @@ async function loadMarkdownFilePromise(post) {
 		} else if (Number.isInteger(value)) {
 			// output unquoted
 			outputValue = value.toString();
+		} else if (value instanceof Date) {
+			outputValue = value.toLocaleString('en-US', {
+				weekday: "long",
+  				year: "numeric",
+				month: "long",
+				day: "numeric",
+			});
 		} else if (value instanceof luxon.DateTime) {
 			if (shared.config.dateFormat) {
 				outputValue = value.toFormat(shared.config.dateFormat);

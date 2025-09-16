@@ -11,7 +11,6 @@ export async function parseFilePromise() {
 	const content = await fs.promises.readFile(shared.config.input, 'utf8');
 	const rssData = await data.load(content);
 	const allPostData = rssData.child('channel').children('item');
-
 	const postTypes = getPostTypes(allPostData);
 	const posts = collectPosts(allPostData, postTypes);
 
@@ -98,6 +97,7 @@ function buildPost(data) {
 		isDraft: data.childValue('status') === 'draft',
 		slug: decodeURIComponent(data.childValue('post_name')),
 		date: getPostDate(data),
+		modified: getModifiedDate(data),
 		coverImageId: getPostMetaValue(data, '_thumbnail_id'),
 
 		// these are possibly set later in mergeImagesIntoPosts()
@@ -109,6 +109,17 @@ function buildPost(data) {
 function getPostDate(data) {
 	const date = luxon.DateTime.fromRFC2822(data.childValue('pubDate'), { zone: shared.config.timezone });
 	return date.isValid ? date : undefined;
+}
+
+function getModifiedDate(data) {
+	const date = new Date(data.childValue('post_date'));
+	const modified = new Date(data.childValue('post_modified'));
+
+	if (date.toString() === modified.toString()) {
+		return undefined;
+	} else {
+		return modified;
+	}
 }
 
 function getPostMetaValue(data, key) {
@@ -139,7 +150,7 @@ function collectScrapedImages(allPostData, postTypes) {
 	postTypes.forEach((postType) => {
 		getItemsOfType(allPostData, postType).forEach((postData) => {
 			const postId = postData.childValue('post_id');
-			
+
 			const postContent = postData.childValue('encoded');
 			const scrapedUrls = [...postContent.matchAll(/<img(?=\s)[^>]+?(?<=\s)src="(.+?)"[^>]*>/gi)].map((match) => match[1]);
 			scrapedUrls.forEach((scrapedUrl) => {
