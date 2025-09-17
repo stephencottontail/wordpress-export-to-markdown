@@ -39,6 +39,11 @@ export function id(post) {
 	return parseInt(post.id);
 }
 
+export function modified(post) {
+	// standard Date object
+	return post.modified;
+}
+
 export function slug(post) {
 	// previously parsed and decoded
 	return post.slug;

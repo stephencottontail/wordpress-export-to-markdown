@@ -33,7 +33,7 @@ export function load() {
 			name: 'prefix-date',
 			type: 'boolean',
 			description: 'Add date prefix to posts',
-			default: false,
+			default: true,
 			choices: [
 				{
 					name: 'Yes',
@@ -110,7 +110,7 @@ export function load() {
 			name: 'frontmatter-fields',
 			type: 'list',
 			description: 'Frontmatter fields',
-			default: 'title,date,categories,tags,coverImage,draft'
+			default: 'title,date:created,modified,categories,tags,coverImage,draft'
 		},
 		{
 			name: 'request-delay',
