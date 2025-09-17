@@ -4,14 +4,6 @@ export function author(post) {
 	return post.data.optionalChildValue('creator');
 }
 
-export function categories(post) {
-	// array of decoded category names, excluding 'uncategorized'
-	const categories = post.data.children('category');
-	return categories
-		.filter((category) => category.attribute('domain') === 'category' && category.attribute('nicename') !== 'uncategorized')
-		.map((category) => decodeURIComponent(category.attribute('nicename')));
-}
-
 export function coverImage(post) {
 	// cover image filename, previously parsed and decoded
 	return post.coverImage;

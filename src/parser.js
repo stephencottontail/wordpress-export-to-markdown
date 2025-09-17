@@ -83,6 +83,14 @@ function collectPosts(allPostData, postTypes) {
 	return allPosts;
 }
 
+function getCategory(data) {
+	// array of decoded category names, excluding 'uncategorized'
+	const categories = data.children('category');
+	return categories
+		.filter((category) => category.attribute('domain') === 'category' && category.attribute('nicename') !== 'uncategorized')
+		.map((category) => decodeURIComponent(category.attribute('nicename')));
+}
+
 function buildPost(data) {
 	return {
 		// full raw post data
@@ -96,6 +104,7 @@ function buildPost(data) {
 		id: data.childValue('post_id'),
 		isDraft: data.childValue('status') === 'draft',
 		slug: decodeURIComponent(data.childValue('post_name')),
+		category: getCategory(data),
 		date: getPostDate(data),
 		modified: getModifiedDate(data),
 		coverImageId: getPostMetaValue(data, '_thumbnail_id'),

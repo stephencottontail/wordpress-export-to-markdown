@@ -30,19 +30,9 @@ export function buildPostPath(post, overrideConfig) {
 	// start with output folder
 	const pathSegments = [pathConfig.output];
 
-	// add folder for post type if exists
-	if (post.type) {
-		switch (post.type) {
-			case 'post':
-				pathSegments.push('posts');
-				break;
-			case 'page':
-				pathSegments.push('pages');
-				break;
-			default:
-				pathSegments.push('custom');
-				pathSegments.push(post.type);
-		}
+	// add folder for post category
+	if (post.category) {
+		pathSegments.push(post.category[0]);
 	}
 
 	// add drafts folder if this is a draft post

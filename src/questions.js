@@ -15,7 +15,7 @@ export function load() {
 			name: 'post-folders',
 			type: 'boolean',
 			description: 'Put each post into its own folder',
-			default: true,
+			default: false,
 			choices: [
 				{
 					name: 'Yes',
