@@ -107,12 +107,13 @@ function buildPost(data) {
 }
 
 function getPostDate(data) {
-	const date = luxon.DateTime.fromRFC2822(data.childValue('pubDate'), { zone: shared.config.timezone });
-	return date.isValid ? date : undefined;
+	const date = new Date(data.childValue('post_date'));
+
+	return isNaN(date.valueOf()) ? underined : date;
 }
 
 function getModifiedDate(data) {
-	const date = new Date(data.childValue('post_date'));
+	const date = getPostDate(data);
 	const modified = new Date(data.childValue('post_modified'));
 
 	if (date.toString() === modified.toString()) {
