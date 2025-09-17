@@ -43,7 +43,7 @@ function getCommandLineAnswers(questions) {
 	commander.program.configureOutput({
 		outputError: (str, write) => write(chalk.red(str))
 	});
-	
+
 	questions.forEach((question) => {
 		const option = new commander.Option('--' + question.name + ' <' + question.type + '>', question.description);
 		option.default(question.default);
@@ -157,7 +157,7 @@ function normalize(value, type, onError) {
 
 export function buildSamplePostPath(overrideConfig) {
 	const samplePost = {
-		date: luxon.DateTime.now(),
+		date: new Date(),
 		slug: 'my-post'
 	};
 

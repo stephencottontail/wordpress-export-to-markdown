@@ -33,7 +33,7 @@ export function load() {
 			name: 'prefix-date',
 			type: 'boolean',
 			description: 'Add date prefix to posts',
-			default: false,
+			default: true,
 			choices: [
 				{
 					name: 'Yes',

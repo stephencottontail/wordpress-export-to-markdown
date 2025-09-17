@@ -1,6 +1,14 @@
 import chalk from 'chalk';
 import path from 'path';
 
+function buildDatePrefix(date) {
+	const year = date.getFullYear();
+	const month = (date.getMonth() + 1).toString().padStart(2, '0');
+	const day = date.getDate().toString().padStart(2, '0');
+
+	return `${year}-${month}-${day}`;
+}
+
 // simple data store, populated via intake, used everywhere
 export const config = {};
 
@@ -33,7 +41,7 @@ export function buildPostPath(post, overrideConfig) {
 				break;
 			default:
 				pathSegments.push('custom');
-				pathSegments.push(post.type);	
+				pathSegments.push(post.type);
 		}
 	}
 
@@ -43,6 +51,7 @@ export function buildPostPath(post, overrideConfig) {
 	}
 
 	// add folders for date year/month as appropriate
+	/*
 	if (post.date) {
 		if (pathConfig.dateFolders === 'year' || pathConfig.dateFolders === 'year-month') {
 			pathSegments.push(post.date.toFormat('yyyy'));
@@ -52,13 +61,22 @@ export function buildPostPath(post, overrideConfig) {
 			pathSegments.push(post.date.toFormat('LL'));
 		}
 	}
+	*/
 
 	// get slug with fallback
 	let slug = getSlugWithFallback(post);
 
 	// prepend date to slug as appropriate
-	if (pathConfig.prefixDate && post.date) {
-		slug = post.date.toFormat('yyyy-LL-dd') + '-' + slug;
+	if (pathConfig.prefixDate) {
+		if (post.modified) {
+			const prefix = buildDatePrefix(post.modified);
+
+			slug = `${prefix}-${slug}`;
+		} else {
+			const prefix = buildDatePrefix(post.date);
+
+			slug = `${prefix}-${slug}`;
+		}
 	}
 
 	// use slug as folder or filename as specified
@@ -73,14 +91,14 @@ export function buildPostPath(post, overrideConfig) {
 
 export function getFilenameFromUrl(url) {
 	let filename = url.split('/').slice(-1)[0];
-	
+
 	// Remove query parameters and hash fragments from filename
 	filename = filename.split('?')[0].split('#')[0];
-	
+
 	// Replace any other invalid Windows filename characters
 	const invalidChars = /[<>:"\/\\|?*]/g;
 	filename = filename.replace(invalidChars, '_');
-	
+
 	try {
 		filename = decodeURIComponent(filename)
 	} catch (ex) {
