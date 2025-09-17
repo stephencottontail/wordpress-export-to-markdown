@@ -23,8 +23,8 @@ export function buildPostPath(post, overrideConfig) {
 	const pathSegments = [pathConfig.output];
 
 	// add folder for post category
-	if (post?.frontmatter?.categories) {
-		pathSegments.push(post.frontmatter.categories[0]);
+	if (post.category) {
+		pathSegments.push(post.category[0]);
 	}
 
 	// add drafts folder if this is a draft post
