@@ -9,7 +9,7 @@ function initTurndownService() {
 	const turndownService = new turndown({
 		headingStyle: 'atx',
 		bulletListMarker: '-',
-		codeBlockStyle: 'fenced'
+		codeBlockStyle: 'indented'
 	});
 
 	turndownService.use(turndownPluginGfm.tables);
